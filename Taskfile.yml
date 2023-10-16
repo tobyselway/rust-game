@@ -13,8 +13,8 @@ tasks:
 
   run:
     cmds:
-      - cargo run --features bevy/dynamic_linking
+      - cargo run
 
   run-nix:
     cmds:
-      - nix develop -c cargo run --features bevy/dynamic_linking
+      - nix develop -c cargo run
