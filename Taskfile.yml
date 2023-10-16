@@ -8,8 +8,12 @@ vars:
 tasks:
   default:
     cmds:
-      - echo "{{.GREETING}}"
+      - task --list
     silent: true
+
+  run:
+    cmds:
+      - cargo run --features bevy/dynamic_linking
 
   run-nix:
     cmds:
