@@ -82,7 +82,7 @@ fn tower_shooting(
                         })
                         .insert(Bullet {
                             direction,
-                            speed: 1.0,
+                            speed: 2.0,
                         })
                         .insert(Name::new("Bullet"));
                 }
@@ -125,6 +125,30 @@ fn move_bullets(
 ) {
     for (bullet, mut transform) in &mut bullets {
         transform.translation += bullet.direction.normalize() * bullet.speed * time.delta_seconds();
+    }
+}
+
+fn bullet_collision(
+    mut commands: Commands,
+    bullets: Query<(Entity, &GlobalTransform), With<Bullet>>,
+    mut targets: Query<(&mut Health, &Transform), With<Target>>,
+) {
+    for (bullet, bullet_transform) in &bullets {
+        for (mut health, target_transform) in &mut targets {
+            if Vec3::distance(bullet_transform.translation(), target_transform.translation) < 0.2 {
+                commands.entity(bullet).despawn_recursive();
+                health.value -= 1;
+                break;
+            }
+        }
+    }
+}
+
+fn target_death(mut commands: Commands, targets: Query<(Entity, &Health)>) {
+    for (entity, health) in &targets {
+        if health.value <= 0 {
+            commands.entity(entity).despawn_recursive();
+        }
     }
 }
 
@@ -208,6 +232,8 @@ fn main() {
             bullet_despawn,
             move_targets,
             move_bullets,
+            target_death,
+            bullet_collision,
         ))
         .run();
 }
