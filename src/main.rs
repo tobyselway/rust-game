@@ -1,24 +1,18 @@
 use bevy::{
     prelude::*,
-    window::WindowResolution
+    window::WindowResolution,
 };
 use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
+use camera::*;
 use target::*;
 use bullet::*;
 use tower::*;
 
+mod camera;
 mod target;
 mod bullet;
 mod tower;
-
-fn spawn_camera(mut commands: Commands) {
-    commands.spawn(Camera3dBundle {
-        transform: Transform::from_xyz(-2.0, 2.5, 5.0)
-            .looking_at(Vec3::ZERO, Vec3::Y),
-        ..default()
-    });
-}
 
 #[derive(Resource)]
 pub struct GameAssets {
@@ -94,6 +88,7 @@ fn main() {
                     ..default()
                 }),
             WorldInspectorPlugin::new(),
+            CameraPlugin,
             BulletPlugin,
             TargetPlugin,
             TowerPlugin,
@@ -102,7 +97,6 @@ fn main() {
         .add_systems(Startup, (
             asset_loading,
             spawn_basic_scene,
-            spawn_camera,
         ))
         .run();
 }
