@@ -3,12 +3,12 @@
 version: '3'
 
 vars:
-  GREETING: Hello, World!
+  GREETING: Hello, Cruel World!
 
 tasks:
   default:
     cmds:
-      - task --list
+      - task -l
     silent: true
 
   run:
